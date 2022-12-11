@@ -1,0 +1,42 @@
+version: "3"
+services:
+
+  # server:
+  #   command: npm run debug
+  #   build: .
+  #   volumes:
+  #     - ./dist/src:/server/dist/src/ # same folder structure on local machine and docker container
+  #   ports:
+  #     - "3001:3001" # open port for server api
+  #     - "9222:9222" # open port for inspector to debug
+
+
+  postgres:
+    container_name: postgres3
+    image: postgres:latest
+    ports:
+    - "5435:5435"
+    volumes:
+    - /data/postgres:/data/postgres
+    env_file:
+    - docker.env
+    networks:
+    - postgres
+ 
+  pgadmin:
+    links:
+    - postgres:postgres
+    container_name: pgadmin2
+    image: dpage/pgadmin4
+    ports:
+    - "8080:80"
+    volumes:
+    - /data/pgadmin:/root/.pgadmin
+    env_file:
+    - docker.env
+    networks:
+    - postgres
+ 
+networks:
+  postgres:
+    driver: bridge
